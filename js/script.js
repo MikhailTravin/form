@@ -383,7 +383,20 @@ document.addEventListener('DOMContentLoaded', () => {
 */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Функция для наблюдения за изменениями стиля card-number-mask
+    // Глобальная функция для проверки заполненности поля
+    const isFieldComplete = (input) => {
+        if (!input) return false;
+
+        if (input.id === 'email') {
+            return validateEmail(input); // Используем специальную проверку для email
+        }
+
+        const cleanValue = input.value.replace(/\D/g, '');
+        const cleanPlaceholder = input.placeholder?.replace(/\D/g, '') || '';
+        return cleanValue.length >= cleanPlaceholder.length;
+    };
+
+    // Глобальная функция для наблюдения за изменениями стиля card-number-mask
     const observeCardNumberMask = (popupInputsSelector) => {
         const popupInputs = document.querySelector(popupInputsSelector);
         if (!popupInputs) {
@@ -410,6 +423,36 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(cardNumberMask, { attributes: true });
     };
 
+    // Основная функция валидации формы (глобальная)
+    const validateForm = (popupInputsSelector) => {
+        const popupInputs = document.querySelector(popupInputsSelector);
+        if (!popupInputs) return;
+
+        const inputs = popupInputs.querySelectorAll('input[data-required]');
+        const submitButton = popupInputs.closest('.popup__body')?.querySelector('.popup__button');
+        if (!submitButton) return;
+
+        const allFieldsValid = Array.from(inputs).every(input => {
+            if (input.id === 'email') {
+                // Проверяем состояние чекбокса
+                const switchCheckbox = document.querySelector('.switch__checkbox');
+                if (!switchCheckbox || !switchCheckbox.checked) {
+                    return true; // Игнорируем поле email, если чекбокс не отмечен
+                }
+            }
+            return isFieldComplete(input);
+        });
+
+        const noErrors = !popupInputs.classList.contains('_form-error');
+        if (allFieldsValid && noErrors) {
+            submitButton.classList.add('active');
+            submitButton.disabled = false;
+        } else {
+            submitButton.classList.remove('active');
+            submitButton.disabled = true;
+        }
+    };
+
     // Функция для инициализации логики ввода данных
     const initializeInputLogic = (popupInputsSelector) => {
         const popupInputs = document.querySelector(popupInputsSelector);
@@ -427,14 +470,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const mastercardIcon = popupInputs.querySelector('.payment-mastercard');
         const maestroIcon = popupInputs.querySelector('.payment-maestro');
         const cardNumberMask = popupInputs.querySelector('.card-number-mask');
-        const inputs = popupInputs.querySelectorAll('input[data-required]');
-        const form = popupInputs.closest('.popup__body');
-        const submitButton = form?.querySelector('.popup__button');
-
-        if (!submitButton) {
-            console.error('Кнопка "Оплатить" не найдена в DOM.');
-            return;
-        }
 
         let errorSpan = null;
         let isMasked = false;
@@ -466,19 +501,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const digitsOnly = value.replace(/\D/g, '');
             const groups = digitsOnly.match(/.{1,4}/g);
             return groups ? groups.join(' ') : '';
-        };
-
-        // Функция для проверки заполненности поля
-        const isFieldComplete = (input) => {
-            if (!input) return false;
-
-            if (input.id === 'email') {
-                return validateEmail(input); // Используем специальную проверку для email
-            }
-
-            const cleanValue = input.value.replace(/\D/g, '');
-            const cleanPlaceholder = input.placeholder?.replace(/\D/g, '') || '';
-            return cleanValue.length >= cleanPlaceholder.length;
         };
 
         // Функция для проверки валидности email
@@ -517,29 +539,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 popupInputs.classList.remove('_form-error');
                 removeErrorSpan();
                 return true;
-            }
-        };
-
-        // Основная функция валидации формы
-        const validateForm = () => {
-            const allFieldsValid = Array.from(inputs).every(input => {
-                if (input.id === 'email') {
-                    // Проверяем состояние чекбокса
-                    const switchCheckbox = document.querySelector('.switch__checkbox');
-                    if (!switchCheckbox || !switchCheckbox.checked) {
-                        return true; // Игнорируем поле email, если чекбокс не отмечен
-                    }
-                }
-                return isFieldComplete(input);
-            });
-
-            const noErrors = !popupInputs.classList.contains('_form-error');
-            if (allFieldsValid && noErrors) {
-                submitButton.classList.add('active');
-                submitButton.disabled = false;
-            } else {
-                submitButton.classList.remove('active');
-                submitButton.disabled = true;
             }
         };
 
@@ -596,31 +595,32 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (cardNumberMask) cardNumberMask.style.display = 'none';
                 }
 
-                validateForm(); // Перепроверяем форму после каждого изменения
+                validateForm(popupInputsSelector); // Передаем селектор блока
             });
         }
 
         // Обработчики для остальных полей
         if (dateInput) {
             dateInput.addEventListener('input', (e) => {
-                validateForm();
+                validateForm(popupInputsSelector);
                 const rawValue = dateInput.value.replace(/\D/g, '');
                 if (rawValue.length === 4) cvvInput?.focus(); // Переходим к CVV после даты
             });
         }
 
         if (cvvInput) {
-            cvvInput.addEventListener('input', validateForm); // Перепроверяем форму при изменении CVV
+            cvvInput.addEventListener('input', () => validateForm(popupInputsSelector)); // Перепроверяем форму при изменении CVV
         }
 
         if (emailInput) {
             emailInput.addEventListener('input', () => {
                 validateEmail(emailInput); // Проверяем email
-                validateForm(); // Перепроверяем форму
+                validateForm(popupInputsSelector); // Перепроверяем форму
             });
         }
 
         // Общие обработчики для всех полей
+        const inputs = popupInputs.querySelectorAll('input[data-required]');
         inputs.forEach(input => {
             input.addEventListener('focus', () => {
                 popupInputs.classList.add('_form-focus');
@@ -648,7 +648,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
 
-                validateForm(); // Перепроверяем форму после потери фокуса
+                validateForm(popupInputsSelector); // Перепроверяем форму после потери фокуса
             });
         });
 
@@ -670,7 +670,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 mastercardIcon.style.display = 'none';
                 maestroIcon.style.display = 'none';
                 paymentCloseIcon.style.display = 'none';
-
                 isMasked = false;
 
                 if (cardNumberMask) cardNumberMask.style.display = 'none';
@@ -682,7 +681,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 removeErrorSpan();
 
                 if (cardNumberInput) cardNumberInput.focus();
-                validateForm(); // Перепроверяем форму после очистки
+                validateForm(popupInputsSelector); // Перепроверяем форму после очистки
             });
         }
     };
@@ -704,7 +703,7 @@ document.addEventListener('DOMContentLoaded', () => {
         switchCheckbox.addEventListener('change', (e) => {
             if (e.target.checked) {
                 bottomPopupInputs.classList.remove('hidden'); // Показываем поле email
-                validateForm(); // Перепроверяем форму
+                validateForm('.popup__bottom .popup__inputs'); // Перепроверяем форму
             } else {
                 bottomPopupInputs.classList.add('hidden'); // Скрываем поле email
                 bottomPopupInputs.classList.remove('_form-error'); // Убираем ошибку
@@ -712,7 +711,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const errorSpan = bottomPopupInputs.parentNode.querySelector('.form-error');
                 if (errorSpan) errorSpan.remove(); // Удаляем сообщение об ошибке
 
-                validateForm(); // Перепроверяем форму
+                validateForm('.popup__bottom .popup__inputs'); // Перепроверяем форму
             }
         });
     }
