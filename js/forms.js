@@ -47,14 +47,14 @@ function initializeInputMask(elements, mask, options = {}) {
 					let [month, year] = unmaskedValue.split("").map(Number);
 
 					// Корректировка месяца
-					if (month > 12 || month < 1) {
+					if (isNaN(month) || month > 12 || month < 1) {
 						month = 1; // Если месяц больше 12 или меньше 1, устанавливаем 01
 					}
 					month = String(month).padStart(2, "0"); // Добавляем ведущий ноль
 
 					// Корректировка года
 					const currentYear = new Date().getFullYear() % 100; // Текущий год (последние две цифры)
-					if (year < currentYear || year > 99) {
+					if (isNaN(year) || year < currentYear || year > 99) {
 						year = currentYear; // Если год меньше текущего или больше 99, устанавливаем текущий год
 					}
 					year = String(year).padStart(2, "0"); // Добавляем ведущий ноль

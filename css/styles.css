@@ -516,8 +516,8 @@ body::after {
   font-weight: 400;
   width: 100%;
   letter-spacing: 0.2px;
-  pointer-events: none;
-  opacity: 0.56;
+  pointer-events: auto;
+  opacity: 1;
   border-radius: 0.5rem;
   margin-top: 1.5rem;
   background-color: #2e71fc;
@@ -534,10 +534,6 @@ body::after {
   text-align: center;
   height: 56px;
   padding: 10px;
-}
-.popup__button.active {
-  pointer-events: auto;
-  opacity: 1;
 }
 @media (max-width: 767.98px) {
   .popup__button {
@@ -577,6 +573,11 @@ body::after {
 .popup__status-icon img {
   width: 180px;
   height: 180px;
+}
+
+[disabled] {
+  pointer-events: none;
+  opacity: 0.56;
 }
 
 .form-error {

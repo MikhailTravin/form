@@ -7,7 +7,7 @@
 		<meta name="format-detection" content="telephone=no">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-		<link rel="stylesheet" href="css/styles.css?v=1745765840830" />
+		<link rel="stylesheet" href="css/styles.css?v=1745779398179" />
 
 		<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -70,7 +70,7 @@
 								</div>
 							</div>
 						</div>
-						<button data-popup="#success" type="submit" class="popup__button">Оплатить</button>
+						<button data-popup="#success" type="submit" class="popup__button" disabled>Оплатить</button>
 						<div class="popup__bottom bottom-popup">
 							<div class="bottom-popup__title save-title">
 								<span>
@@ -88,7 +88,7 @@
 							<div class="bottom-popup__title">
 								Отправить квитанцию на E-mail
 								<label class="switch">
-									<input checked type="checkbox" class="switch__checkbox">
+									<input type="checkbox" class="switch__checkbox">
 									<span class="switch__slider">
 										<span class="switch__check">
 											<svg aria-hidden="true" width="24" height="24">
@@ -98,10 +98,10 @@
 								</label>
 							</div>
 							<div class="bottom-popup__inputs">
-								<div class="popup__inputs">
+								<div class="popup__inputs hidden">
 									<div class="popup__input">
 										<label for="email">E-mail</label>
-										<input id="email" data-error="Для оплаты введите E-mail" data-required autocomplete="off" type="text" name="form[2]" placeholder="">
+										<input id="email" data-error="Для оплаты введите E-mail" data-required autocomplete="off" type="text" name="form[]" placeholder="">
 									</div>
 									<div class="popup__icons">
 										<div class="payment-close">
