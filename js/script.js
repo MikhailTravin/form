@@ -60,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Элемент .card-number-mask не найден в DOM.');
             return;
         }
-
         const observer = new MutationObserver((mutationsList) => {
             mutationsList.forEach((mutation) => {
                 if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
@@ -73,7 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
-
         observer.observe(cardNumberMask, { attributes: true });
     };
 
@@ -186,6 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return true;
             }
         };
+
         // Основная функция валидации формы
         const validateForm = () => {
             const allFieldsValid = Array.from(inputs).every(input => {
@@ -239,10 +238,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (cardType) {
                         cardNumberInput.value = `*${rawValue.slice(-4)}`;
                         isMasked = true;
+
                         if (cardNumberMask) {
                             cardNumberMask.style.display = 'flex';
                             cardNumberMask.querySelector('.t-value').textContent = `*${rawValue.slice(-4)}`;
                         }
+
                         popupInputs.classList.add('active');
                         document.querySelector('.input_expire')?.classList.add('active');
                         document.querySelector('.input_cvv')?.classList.add('active');
@@ -250,11 +251,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else {
                         cardNumberInput.value = formatCardNumber(rawValue);
                         isMasked = false;
+
                         if (cardNumberMask) cardNumberMask.style.display = 'none';
                     }
                 } else if (rawValue.length < 16) {
                     cardNumberInput.value = formatCardNumber(rawValue);
                     isMasked = false;
+
                     if (cardNumberMask) cardNumberMask.style.display = 'none';
                 }
 
@@ -293,6 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const rawValue = input.getAttribute('data-raw-value');
                     input.value = formatCardNumber(rawValue);
                     isMasked = false;
+
                     if (cardNumberMask) cardNumberMask.style.display = 'none';
                 }
             });
@@ -302,11 +306,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     const rawValue = input.getAttribute('data-raw-value');
                     input.value = `*${rawValue.slice(-4)}`;
                     isMasked = true;
+
                     if (cardNumberMask) {
                         cardNumberMask.style.display = 'flex';
                         cardNumberMask.querySelector('.t-value').textContent = `*${rawValue.slice(-4)}`;
                     }
                 }
+
                 validateForm();
             });
         });
@@ -315,10 +321,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (paymentCloseIcon) {
             paymentCloseIcon.addEventListener('click', (e) => {
                 e.stopPropagation();
+
                 if (cardNumberInput) {
                     cardNumberInput.value = '';
                     cardNumberInput.setAttribute('data-raw-value', '');
                 }
+
                 if (dateInput) dateInput.value = '';
                 if (cvvInput) cvvInput.value = '';
                 if (emailInput) emailInput.value = '';
@@ -329,8 +337,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 paymentCloseIcon.style.display = 'none';
 
                 isMasked = false;
-                if (cardNumberMask) cardNumberMask.style.display = 'none';
 
+                if (cardNumberMask) cardNumberMask.style.display = 'none';
                 popupInputs.classList.remove('active');
                 document.querySelector('.input_expire')?.classList.remove('active');
                 document.querySelector('.input_cvv')?.classList.remove('active');
@@ -374,4 +382,3 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 //========================================================================================================================================================
-
