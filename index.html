@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+	<head>
+		<title>Главная</title>
+		<meta charset="utf-8">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<link rel="stylesheet" href="css/styles.css?v=1745761391532" />
+
+		<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+	</head>
+
+	<body>
+		<div class="wrapper">
+			<main class="page">
+				<a href="#" data-popup="#balance" class="button">Пополнить баланс</a>
+			</main>
+		</div>
+		<div id="balance" aria-hidden="true" class="popup">
+			<div class="popup__wrapper">
+				<div class="popup__content">
+					<button data-close type="button" class="popup__close">
+						<svg aria-hidden="true" width="21" height="21">
+							<use xlink:href="img/sprite.svg#close-icon"></use>
+						</svg>
+					</button>
+					<form action="#" class="popup__body">
+						<div class="popup__top">
+							<div class="popup__top-title">Пополнение баланса</div>
+							<div class="popup__price">500,00 ₽</div>
+						</div>
+						<div class="popup__center">
+							<div class="popup__title">Оплатить картой</div>
+							<div class="popup__inputs">
+								<div class="popup__input popup-card">
+									<label for="number">Номер карты</label>
+									<input id="number" data-required autocomplete="off" type="text" name="form[]" data-error="Некорректный номер карты" placeholder="0000 0000 0000 0000" class="number-card">
+									<div class="card-number-mask" style="display: none;">
+										<span class="t-ghost"></span>
+										<span class="t-value"></span>
+									</div>
+								</div>
+								<div class="popup__input input_expire">
+									<label for="date">ММ / ГГ</label>
+									<input id="date" data-error="Ошибка в дате" data-required autocomplete="off" type="text" name="form[]" placeholder="00 / 00" class="date">
+								</div>
+								<div class="popup__input input_cvv">
+									<label for="cvv">CVV</label>
+									<input id="cvv" data-error="Ошибка в дате" data-required autocomplete="off" type="password" name="form[]" placeholder="000" class="cvv">
+								</div>
+								<div class="popup__icons">
+									<img class="payment-mastercard" src="img/icons/payment-mastercard.svg" alt="">
+									<img class="payment-visa" src="img/icons/payment-visa.svg" alt="">
+									<img class="payment-maestro" src="img/icons/payment-maestro.svg" alt="">
+									<div class="payment-close">
+										<svg aria-hidden="true" width="12" height="12">
+											<use xlink:href="img/sprite.svg#close"></use>
+										</svg>
+									</div>
+								</div>
+							</div>
+						</div>
+						<button data-popup="#success" type="submit" class="popup__button">Оплатить</button>
+						<div class="popup__bottom bottom-popup">
+							<div class="bottom-popup__title save-title">
+								<span>
+									При оплате данные карты сохранятся
+								</span>
+								<div class="bottom-popup__icon">
+									<svg aria-hidden="true" width="16" height="16">
+										<use xlink:href="img/sprite.svg#question-circle"></use>
+									</svg>
+									<div class="bottom-popup__tippy">
+										При повторной оплате вам не надо будет вводить платежные реквизиты заново
+									</div>
+								</div>
+							</div>
+							<div class="bottom-popup__title">
+								Отправить квитанцию на E-mail
+								<label class="switch">
+									<input checked type="checkbox" class="switch__checkbox">
+									<span class="switch__slider">
+										<span class="switch__check">
+											<svg aria-hidden="true" width="24" height="24">
+												<use xlink:href="img/sprite.svg#check"></use>
+											</svg>
+										</span></span>
+								</label>
+							</div>
+							<div class="bottom-popup__inputs">
+								<div class="popup__inputs _form-focus">
+									<div class="popup__input">
+										<label for="email">E-mail</label>
+										<input id="email" value="123f@gmail.com" data-error="Для оплаты введите E-mail" data-validate data-required autocomplete="off" type="text" name="form[]" placeholder="" class="email">
+									</div>
+									<div class="popup__icons">
+										<div class="payment-close">
+											<svg aria-hidden="true" width="12" height="12">
+												<use xlink:href="img/sprite.svg#close"></use>
+											</svg>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="popup__footer footer-popup">
+							<div class="footer-popup__images">
+								<svg aria-hidden="true" width="56" height="14">
+									<use xlink:href="img/sprite.svg#icon-1"></use>
+								</svg>
+								<svg aria-hidden="true" width="27" height="14">
+									<use xlink:href="img/sprite.svg#icon-2"></use>
+								</svg>
+								<svg aria-hidden="true" width="44" height="14">
+									<use xlink:href="img/sprite.svg#icon-3"></use>
+								</svg>
+								<svg aria-hidden="true" width="38" height="14">
+									<use xlink:href="img/sprite.svg#icon-4"></use>
+								</svg>
+								<svg aria-hidden="true" width="30" height="14">
+									<use xlink:href="img/sprite.svg#icon-5"></use>
+								</svg>
+								<svg aria-hidden="true" width="25" height="14">
+									<use xlink:href="img/sprite.svg#icon-6"></use>
+								</svg>
+								<svg aria-hidden="true" width="41" height="10">
+									<use xlink:href="img/sprite.svg#icon-7"></use>
+								</svg>
+								<svg aria-hidden="true" width="38" height="14">
+									<use xlink:href="img/sprite.svg#icon-8"></use>
+								</svg>
+								<svg aria-hidden="true" width="38" height="14">
+									<use xlink:href="img/sprite.svg#icon-9"></use>
+								</svg>
+								<svg aria-hidden="true" width="34" height="14">
+									<use xlink:href="img/sprite.svg#icon-10"></use>
+								</svg>
+							</div>
+							<div class="footer-popup__copy">
+								<img src="img/icons/footer-logo.svg" alt="">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div id="success" aria-hidden="true" class="popup">
+			<div class="popup__wrapper">
+				<div class="popup__content">
+					<button data-close type="button" class="popup__close">
+						<svg aria-hidden="true" width="21" height="21">
+							<use xlink:href="img/sprite.svg#close-icon"></use>
+						</svg>
+					</button>
+					<div class="popup__body">
+						<div class="popup__status-icon">
+							<img src="img/icons/fail-icon.svg" alt="">
+						</div>
+						<div class="popup__title">3-D Secure авторизация не пройдена</div>
+						<div class="popup__subtitle">Оплата товаров в show.cloudpayments.ru</div>
+						<div class="popup__price">2,00 ₽</div>
+						<div class="popup__alert-error">
+							Свяжитесь с вашим банком или воспользуйтесь другой картой
+						</div>
+						<button type="button" class="popup__button" data-close>Повторить попытку</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="js/script.js"></script>
+		<script src="js/popup.js"></script>
+		<script src="js/inputmask.js"></script>
+		<script src="js/forms.js"></script>
+	</body>
+
+</html>

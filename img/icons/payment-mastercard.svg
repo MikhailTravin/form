@@ -1,0 +1,17 @@
+<svg
+  viewBox="0 0 32 24"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  preserveAspectRatio="xMidYMid meet"
+  height="100%"
+  width="100%"
+>
+  <ellipse cx="9.84615" cy="12" rx="9.84615" ry="9.8" fill="#EB001B"></ellipse>
+  <ellipse cx="22.1539" cy="12" rx="9.84615" ry="9.8" fill="#F79E1B"></ellipse>
+  <path
+    fill-rule="evenodd"
+    clip-rule="evenodd"
+    d="M15.9999 19.6506C18.2509 17.8546 19.6922 15.0948 19.6922 12C19.6922 8.90518 18.2509 6.14542 15.9999 4.34943C13.7489 6.14542 12.3076 8.90518 12.3076 12C12.3076 15.0948 13.7489 17.8546 15.9999 19.6506Z"
+    fill="#F16122"
+  ></path>
+</svg>
