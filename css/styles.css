@@ -326,6 +326,7 @@ body::after {
       -ms-flex-direction: column;
           flex-direction: column;
   width: 100%;
+  overflow: hidden;
 }
 .popup__input label {
   line-height: 1.5;
@@ -401,10 +402,11 @@ body::after {
           transition-timing-function: ease-in-out;
   -webkit-transform: translate3d(0, 0, 0);
           transform: translate3d(0, 0, 0);
+  width: 100%;
 }
 .active .popup__input.popup-card input {
   opacity: 0;
-  pointer-events: none;
+  width: 180px;
   -webkit-transform: translate3d(-50%, 0, 0);
           transform: translate3d(-50%, 0, 0);
 }
@@ -514,6 +516,7 @@ body::after {
   font-weight: 400;
   width: 100%;
   letter-spacing: 0.2px;
+  pointer-events: none;
   opacity: 0.56;
   border-radius: 0.5rem;
   margin-top: 1.5rem;
