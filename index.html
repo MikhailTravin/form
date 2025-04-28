@@ -7,7 +7,7 @@
 		<meta name="format-detection" content="telephone=no">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-		<link rel="stylesheet" href="css/styles.css?v=1745779398179" />
+		<link rel="stylesheet" href="css/styles.css?v=1745821229334" />
 
 		<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -44,7 +44,7 @@
 							<div class="popup__inputs">
 								<div class="popup__input popup-card">
 									<label for="number">Номер карты</label>
-									<input id="number" data-required autocomplete="off" type="text" name="form[]" data-error="Некорректный номер карты" placeholder="0000 0000 0000 0000" class="number-card">
+									<input inputmode="numeric" id="number" data-required autocomplete="off" type="text" name="form[]" data-error="Некорректный номер карты" placeholder="0000 0000 0000 0000" class="number-card">
 									<div class="card-number-mask" style="display: none;">
 										<span class="t-ghost"></span>
 										<span class="t-value"></span>
@@ -52,11 +52,11 @@
 								</div>
 								<div class="popup__input input_expire">
 									<label for="date">ММ / ГГ</label>
-									<input id="date" data-error="Ошибка в дате" data-required autocomplete="off" type="text" name="form[]" placeholder="00 / 00" class="date">
+									<input inputmode="numeric" id="date" data-error="Ошибка в дате" data-required autocomplete="off" type="text" name="form[]" placeholder="00 / 00" class="date">
 								</div>
 								<div class="popup__input input_cvv">
 									<label for="cvv">CVV</label>
-									<input id="cvv" data-error="Ошибка в дате" data-required autocomplete="off" type="password" name="form[]" placeholder="000" class="cvv">
+									<input inputmode="numeric" id="cvv" data-error="Ошибка в дате" data-required autocomplete="off" type="password" name="form[]" placeholder="000" class="cvv">
 								</div>
 								<div class="popup__icons">
 									<img class="payment-mastercard" src="img/icons/payment-mastercard.svg" alt="">

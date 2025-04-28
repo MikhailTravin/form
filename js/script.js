@@ -48,6 +48,44 @@ let bodyLock = (delay = 500) => {
 //========================================================================================================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Функция для ограничения ввода только цифрами
+    const allowOnlyNumbers = (inputElement) => {
+        if (!inputElement) return;
+
+        inputElement.addEventListener('input', (e) => {
+            const value = e.target.value;
+            // Удаляем все символы, кроме цифр
+            const numericValue = value.replace(/\D/g, '');
+            e.target.value = numericValue;
+
+            // Если это поле "Номер карты", форматируем его
+            if (e.target.id === 'number') {
+                e.target.value = formatCardNumber(numericValue);
+            }
+        });
+
+        inputElement.addEventListener('keypress', (e) => {
+            // Разрешаем ввод только цифр
+            if (!/\d/.test(e.key)) {
+                e.preventDefault();
+            }
+        });
+    };
+
+    // Функция для форматирования номера карты
+    const formatCardNumber = (value) => {
+        const groups = value.match(/.{1,4}/g);
+        return groups ? groups.join(' ') : '';
+    };
+
+    // Применяем ограничение к каждому полю
+    const numberInput = document.getElementById('number');
+    const dateInput = document.getElementById('date');
+    const cvvInput = document.getElementById('cvv');
+
+    allowOnlyNumbers(numberInput);
+    allowOnlyNumbers(dateInput);
+    allowOnlyNumbers(cvvInput);
     // Функция для наблюдения за изменениями стиля card-number-mask
     const observeCardNumberMask = (popupInputsSelector) => {
         const popupInputs = document.querySelector(popupInputsSelector);
