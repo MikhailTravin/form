@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @font-face {
   font-family: Stolzl;
   font-weight: 400;
@@ -114,6 +115,11 @@ h6 {
   -ms-touch-action: none;
       touch-action: none;
 }
+html {
+  -ms-touch-action: manipulation;
+      touch-action: manipulation; /* Отключает двойное нажатие для зумирования */
+}
+
 body::after {
   content: "";
   background-color: rgba(11, 30, 70, 0.8);
@@ -847,6 +853,18 @@ body::after {
 @media (max-width: 767.98px) {
   #success .popup__price {
     font-size: 20px;
+  }
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  input,
+  textarea,
+  select {
+    font-size: 16px; /* Временно увеличиваем размер шрифта для браузеров на iPhone */
+    -webkit-transform: scale(0.75);
+            transform: scale(0.75); /* Масштабируем обратно до 12px */
+    -webkit-transform-origin: left top;
+            transform-origin: left top;
   }
 }
 /*# sourceMappingURL=maps/styles.css.map */
