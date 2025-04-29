@@ -7,7 +7,7 @@
 		<meta name="format-detection" content="telephone=no">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-		<link rel="stylesheet" href="css/styles.css?v=1745886104357" />
+		<link rel="stylesheet" href="css/styles.css?v=1745922194840" />
 
 		<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -71,7 +71,24 @@
 							</div>
 							<div class="form-error"></div>
 						</div>
-						<button data-popup="#success" type="submit" class="popup__button" disabled>Оплатить</button>
+						<button type="submit" class="popup__button" disabled>
+							<span class="button-text">Оплатить</span>
+							<div class="t-loader">
+								<svg viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" data-icon="spin">
+									<defs>
+										<linearGradient x1="0%" y1="100%" x2="100%" y2="100%" id="linearGradient-1">
+											<stop stop-color="currentColor" stop-opacity="0" offset="0%"></stop>
+											<stop stop-color="currentColor" stop-opacity="0.50" offset="39.9430698%"></stop>
+											<stop stop-color="currentColor" offset="100%"></stop>
+										</linearGradient>
+									</defs>
+									<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+										<rect fill-opacity="0.01" fill="none" x="0" y="0" width="36" height="36"></rect>
+										<path d="M34,18 C34,9.163444 26.836556,2 18,2 C11.6597233,2 6.18078805,5.68784135 3.59122325,11.0354951" stroke="url(#linearGradient-1)" stroke-width="4" stroke-linecap="round"></path>
+									</g>
+								</svg>
+							</div>
+						</button>
 						<div class="popup__bottom bottom-popup">
 							<div class="bottom-popup__title save-title">
 								<span>
@@ -102,7 +119,7 @@
 								<div class="popup__inputs hidden">
 									<div class="popup__input">
 										<label for="email">E-mail</label>
-										<input id="email" value="123f@gmail.com" data-validate data-error="Для оплаты введите E-mail" data-required autocomplete="off" type="text" name="form[]" placeholder="">
+										<input id="email" data-validate data-error="Для оплаты введите E-mail" data-required autocomplete="off" type="text" name="form[]" placeholder="">
 									</div>
 									<div class="popup__icons">
 										<div class="payment-close" style="display: none;">
@@ -195,7 +212,7 @@
 						</div>
 						<div class="popup__title">3-D Secure авторизация не пройдена</div>
 						<div class="popup__subtitle">Оплата товаров в show.cloudpayments.ru</div>
-						<div class="popup__price">2,00 ₽</div>
+						<div class="popup__price">2,00 <span>₽</span></div>
 						<div class="popup__alert-error">
 							Свяжитесь с вашим банком или воспользуйтесь другой картой
 						</div>
