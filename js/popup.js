@@ -127,7 +127,59 @@ class Popup {
             if (!this._selectorOpen) this.targetOpen.selector = this.lastClosed.selector;
             if (!this._reopen) this.previousActiveElement = document.activeElement;
             this.targetOpen.element = document.querySelector(this.targetOpen.selector);
+
             if (this.targetOpen.element) {
+                // Если это popup #success
+                const isPaymentPopup = this.targetOpen.selector === '#success';
+                // Находим элементы анимации и основного содержимого
+                const animationElement = this.targetOpen.element.querySelector('.popup__animation');
+                const bodyElement = this.targetOpen.element.querySelector('.popup__body');
+
+                if (animationElement && bodyElement) {
+                    // Сбрасываем состояния элементов
+                    animationElement.classList.remove('hidden'); // Убираем класс hidden
+                    bodyElement.classList.remove('_active'); // Убираем класс active
+
+                    // Запускаем таймер для скрытия анимации и показа основного содержимого
+                    setTimeout(() => {
+                        animationElement.classList.add('hidden'); // Скрываем анимацию
+                        bodyElement.classList.add('_active'); // Показываем основное содержимое
+                    }, 1000); // 1 секунды для анимации
+                }
+
+                // Логика для popup #success
+                if (isPaymentPopup) {
+                    const warning = this.targetOpen.element.querySelector('.popup__warning');
+                    const content = this.targetOpen.element.querySelector('.popup__body-2');
+
+                    if (warning && content) {
+
+                        setTimeout(() => {
+                            // Скрываем предупреждение
+                            warning.classList.add('hidden');
+
+                            setTimeout(() => {
+                                content.classList.add('_active'); // Активируем плавное появление
+                            }, 50);
+                        }, 2000); // Время показа предупреждения (2 секунды)
+                    }
+
+                    // Добавляем обработчик клика на .warning-close
+                    const warningCloseBtn = this.targetOpen.element.querySelector('.warning-close');
+                    if (warningCloseBtn) {
+                        warningCloseBtn.addEventListener('click', () => {
+                            if (warning) {
+                                warning.classList.add('hidden'); // Скрываем .popup__warning
+                            }
+                            if (content) {
+                                setTimeout(() => {
+                                    content.classList.add('_active'); // Плавное появление
+                                }, 50);
+                            }
+                        });
+                    }
+                }
+
                 if (this.youTubeCode) {
                     const codeVideo = this.youTubeCode;
                     const urlVideo = `https://www.youtube.com/embed/${codeVideo}?rel=0&showinfo=0&autoplay=1`;
@@ -172,27 +224,49 @@ class Popup {
         }
     }
     close(selectorValue) {
-        if (selectorValue && "string" === typeof selectorValue && "" !== selectorValue.trim()) this.previousOpen.selector = selectorValue;
+        if (selectorValue && "string" === typeof selectorValue && "" !== selectorValue.trim()) {
+            this.previousOpen.selector = selectorValue;
+        }
         if (!this.isOpen || !bodyLockStatus) return;
+
+        // Находим элементы анимации и основного содержимого
+        const animationElement = this.targetOpen.element?.querySelector('.popup__animation');
+        const bodyElement = this.targetOpen.element?.querySelector('.popup__body');
+
+        if (animationElement && bodyElement) {
+            // Удаляем классы active и hidden
+            animationElement.classList.remove('hidden');
+            bodyElement.classList.remove('_active');
+        }
+
         this.options.on.beforeClose(this);
         document.dispatchEvent(new CustomEvent("beforePopupClose", {
             detail: {
                 popup: this
             }
         }));
-        if (this.youTubeCode) if (this.targetOpen.element.querySelector(`[${this.options.youtubePlaceAttribute}]`)) this.targetOpen.element.querySelector(`[${this.options.youtubePlaceAttribute}]`).innerHTML = "";
+
+        if (this.youTubeCode) {
+            if (this.targetOpen.element.querySelector(`[${this.options.youtubePlaceAttribute}]`)) {
+                this.targetOpen.element.querySelector(`[${this.options.youtubePlaceAttribute}]`).innerHTML = "";
+            }
+        }
+
         this.previousOpen.element.classList.remove(this.options.classes.popupActive);
         this.previousOpen.element.setAttribute("aria-hidden", "true");
+
         if (!this._reopen) {
             document.documentElement.classList.remove(this.options.classes.bodyActive);
             !this.bodyLock ? bodyUnlock() : null;
             this.isOpen = false;
         }
+
         document.dispatchEvent(new CustomEvent("afterPopupClose", {
             detail: {
                 popup: this
             }
         }));
+
         setTimeout((() => {
             this._focusTrap();
         }), 50);

@@ -46,46 +46,8 @@ let bodyLock = (delay = 500) => {
 };
 
 //========================================================================================================================================================
-
+/*
 document.addEventListener('DOMContentLoaded', () => {
-    // Функция для ограничения ввода только цифрами
-    const allowOnlyNumbers = (inputElement) => {
-        if (!inputElement) return;
-
-        inputElement.addEventListener('input', (e) => {
-            const value = e.target.value;
-            // Удаляем все символы, кроме цифр
-            const numericValue = value.replace(/\D/g, '');
-            e.target.value = numericValue;
-
-            // Если это поле "Номер карты", форматируем его
-            if (e.target.id === 'number') {
-                e.target.value = formatCardNumber(numericValue);
-            }
-        });
-
-        inputElement.addEventListener('keypress', (e) => {
-            // Разрешаем ввод только цифр
-            if (!/\d/.test(e.key)) {
-                e.preventDefault();
-            }
-        });
-    };
-
-    // Функция для форматирования номера карты
-    const formatCardNumber = (value) => {
-        const groups = value.match(/.{1,4}/g);
-        return groups ? groups.join(' ') : '';
-    };
-
-    // Применяем ограничение к каждому полю
-    const numberInput = document.getElementById('number');
-    const dateInput = document.getElementById('date');
-    const cvvInput = document.getElementById('cvv');
-
-    allowOnlyNumbers(numberInput);
-    allowOnlyNumbers(dateInput);
-    allowOnlyNumbers(cvvInput);
     // Функция для наблюдения за изменениями стиля card-number-mask
     const observeCardNumberMask = (popupInputsSelector) => {
         const popupInputs = document.querySelector(popupInputsSelector);
@@ -114,13 +76,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Функция для инициализации логики ввода данных
-    const initializeInputLogic = (popupInputsSelector) => {
+    const initializeInputLogic = (popupInputsSelector, isBottom = false) => {
         const popupInputs = document.querySelector(popupInputsSelector);
         if (!popupInputs) {
             console.error(`Контейнер ${popupInputsSelector} не найден в DOM.`);
             return;
         }
-
         const cardNumberInput = popupInputs.querySelector('#number');
         const dateInput = popupInputs.querySelector('#date');
         const cvvInput = popupInputs.querySelector('#cvv');
@@ -137,9 +98,19 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Кнопка "Оплатить" не найдена в DOM.');
             return;
         }
-
         let errorSpan = null;
         let isMasked = false;
+
+        // Для нижнего блока добавляем проверку чекбокса
+        if (isBottom) {
+            const switchCheckbox = document.querySelector('.switch__checkbox');
+            popupInputs.classList.toggle('hidden', !switchCheckbox.checked);
+
+            switchCheckbox.addEventListener('change', () => {
+                popupInputs.classList.toggle('hidden', !switchCheckbox.checked);
+                validateForm();
+            });
+        }
 
         // Функция для удаления span с ошибкой
         const removeErrorSpan = () => {
@@ -187,12 +158,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             const isEmpty = input.value.trim() === '';
             const isValid = emailPattern.test(input.value);
+            const container = input.closest('.popup__inputs');
+            if (!container) {
+                console.error('Контейнер .popup__inputs не найден.');
+                return false;
+            }
             if (isEmpty) {
-                popupInputs.classList.add('_form-error');
+                container.classList.add('_form-error');
                 if (!errorSpan) {
                     errorSpan = document.createElement('span');
                     errorSpan.className = 'form-error';
-                    popupInputs.parentNode.insertBefore(errorSpan, popupInputs.nextSibling);
+                    container.parentNode.insertBefore(errorSpan, container.nextSibling);
                 }
                 errorSpan.textContent = 'Для оплаты введите E-mail';
                 setTimeout(() => {
@@ -200,11 +176,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 10);
                 return false;
             } else if (!isValid) {
-                popupInputs.classList.add('_form-error');
+                container.classList.add('_form-error');
                 if (!errorSpan) {
                     errorSpan = document.createElement('span');
                     errorSpan.className = 'form-error';
-                    popupInputs.parentNode.insertBefore(errorSpan, popupInputs.nextSibling);
+                    container.parentNode.insertBefore(errorSpan, container.nextSibling);
                 }
                 errorSpan.textContent = 'Некорректный E-mail';
                 setTimeout(() => {
@@ -212,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 10);
                 return false;
             } else {
-                popupInputs.classList.remove('_form-error');
+                container.classList.remove('_form-error');
                 removeErrorSpan();
                 return true;
             }
@@ -255,8 +231,6 @@ document.addEventListener('DOMContentLoaded', () => {
             cardNumberInput.addEventListener('input', (e) => {
                 const rawValue = cardNumberInput.value.replace(/\s+/g, '');
                 cardNumberInput.setAttribute('data-raw-value', rawValue);
-
-                // Показываем иконки платежных систем
                 if (rawValue.length > 0) {
                     visaIcon.style.display = 'none';
                     mastercardIcon.style.display = 'none';
@@ -272,8 +246,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     maestroIcon.style.display = 'none';
                     paymentCloseIcon.style.display = 'none';
                 }
-
-                // Обработка маскировки карты
                 if (rawValue.length === 16) {
                     const cardType = detectCardType(rawValue);
                     if (cardType) {
@@ -284,8 +256,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             cardNumberMask.querySelector('.t-value').textContent = `*${rawValue.slice(-4)}`;
                         }
                         popupInputs.classList.add('active');
-                        document.querySelector('.input_expire')?.classList.add('active');
-                        document.querySelector('.input_cvv')?.classList.add('active');
+                        popupInputs.querySelector('.input_expire')?.classList.add('active');
+                        popupInputs.querySelector('.input_cvv')?.classList.add('active');
                         dateInput?.focus();
                     } else {
                         cardNumberInput.value = formatCardNumber(rawValue);
@@ -298,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (cardNumberMask) cardNumberMask.style.display = 'none';
                 }
                 validateForm();
-                updateFieldFilledState(cardNumberInput); // Добавляем класс filled
+                updateFieldFilledState(cardNumberInput);
             });
         }
 
@@ -306,44 +278,46 @@ document.addEventListener('DOMContentLoaded', () => {
         if (dateInput) {
             dateInput.addEventListener('input', (e) => {
                 validateForm();
-                updateFieldFilledState(dateInput); // Добавляем класс filled
+                updateFieldFilledState(dateInput);
                 const rawValue = dateInput.value.replace(/\D/g, '');
-                if (rawValue.length === 4) cvvInput?.focus(); // Переходим к CVV после даты
+                if (rawValue.length === 4) cvvInput?.focus();
             });
         }
-
         if (cvvInput) {
             cvvInput.addEventListener('input', () => {
                 validateForm();
-                updateFieldFilledState(cvvInput); // Добавляем класс filled
+                updateFieldFilledState(cvvInput);
             });
         }
-
         if (emailInput) {
             emailInput.addEventListener('focus', () => {
-                popupInputs.classList.remove('_form-error'); // Убираем ошибку, если она была
-                removeErrorSpan();
+                const container = emailInput.closest('.popup__inputs');
+                if (container) {
+                    container.classList.remove('_form-error');
+                    removeErrorSpan();
+                }
             });
-
             emailInput.addEventListener('input', () => {
-                validateEmail(emailInput); // Проверяем email
-                validateForm(); // Перепроверяем форму
-                updateFieldFilledState(emailInput); // Добавляем класс filled
+                validateEmail(emailInput);
+                validateForm();
+                updateFieldFilledState(emailInput);
             });
-
             emailInput.addEventListener('blur', () => {
-                validateEmail(emailInput); // Проверяем email
-                validateForm(); // Перепроверяем форму
-                updateFieldFilledState(emailInput); // Добавляем класс filled
+                validateEmail(emailInput);
+                validateForm();
+                updateFieldFilledState(emailInput);
             });
         }
 
         // Общие обработчики для всех полей
         inputs.forEach(input => {
             input.addEventListener('focus', () => {
-                popupInputs.classList.add('_form-focus');
-                popupInputs.classList.remove('_form-error');
-                removeErrorSpan();
+                const container = input.closest('.popup__inputs');
+                if (container) {
+                    container.classList.add('_form-focus');
+                    container.classList.remove('_form-error');
+                    removeErrorSpan();
+                }
                 if (input === cardNumberInput && isMasked) {
                     const rawValue = input.getAttribute('data-raw-value');
                     input.value = formatCardNumber(rawValue);
@@ -351,19 +325,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (cardNumberMask) cardNumberMask.style.display = 'none';
                 }
             });
-
             input.addEventListener('blur', () => {
-                if (input === cardNumberInput && isFieldComplete(cardNumberInput)) {
-                    const rawValue = input.getAttribute('data-raw-value');
-                    input.value = `*${rawValue.slice(-4)}`;
-                    isMasked = true;
-                    if (cardNumberMask) {
-                        cardNumberMask.style.display = 'flex';
-                        cardNumberMask.querySelector('.t-value').textContent = `*${rawValue.slice(-4)}`;
+                const container = input.closest('.popup__inputs');
+                if (container) {
+                    if (input === cardNumberInput && isFieldComplete(cardNumberInput)) {
+                        const rawValue = input.getAttribute('data-raw-value');
+                        input.value = `*${rawValue.slice(-4)}`;
+                        isMasked = true;
+                        if (cardNumberMask) {
+                            cardNumberMask.style.display = 'flex';
+                            cardNumberMask.querySelector('.t-value').textContent = `*${rawValue.slice(-4)}`;
+                        }
                     }
+                    validateForm();
+                    updateFieldFilledState(input);
                 }
-                validateForm();
-                updateFieldFilledState(input); // Добавляем класс filled
             });
         });
 
@@ -374,19 +350,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (cardNumberInput) {
                     cardNumberInput.value = '';
                     cardNumberInput.setAttribute('data-raw-value', '');
-                    updateFieldFilledState(cardNumberInput); // Удаляем класс filled
+                    updateFieldFilledState(cardNumberInput);
                 }
                 if (dateInput) {
                     dateInput.value = '';
-                    updateFieldFilledState(dateInput); // Удаляем класс filled
+                    updateFieldFilledState(dateInput);
                 }
                 if (cvvInput) {
                     cvvInput.value = '';
-                    updateFieldFilledState(cvvInput); // Удаляем класс filled
+                    updateFieldFilledState(cvvInput);
                 }
                 if (emailInput) {
                     emailInput.value = '';
-                    updateFieldFilledState(emailInput); // Удаляем класс filled
+                    updateFieldFilledState(emailInput);
                 }
                 visaIcon.style.display = 'none';
                 mastercardIcon.style.display = 'none';
@@ -395,8 +371,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 isMasked = false;
                 if (cardNumberMask) cardNumberMask.style.display = 'none';
                 popupInputs.classList.remove('active');
-                document.querySelector('.input_expire')?.classList.remove('active');
-                document.querySelector('.input_cvv')?.classList.remove('active');
+                popupInputs.querySelector('.input_expire')?.classList.remove('active');
+                popupInputs.querySelector('.input_cvv')?.classList.remove('active');
                 popupInputs.classList.remove('_form-focus');
                 popupInputs.classList.remove('_form-error');
                 removeErrorSpan();
@@ -414,7 +390,7 @@ document.addEventListener('DOMContentLoaded', () => {
     observeCardNumberMask('.popup__center .popup__inputs');
 
     // Инициализация для нижнего блока
-    const bottomForm = initializeInputLogic('.popup__bottom .popup__inputs');
+    const bottomForm = initializeInputLogic('.popup__bottom .popup__inputs', true);
     observeCardNumberMask('.popup__bottom .popup__inputs');
 
     // Логика для переключения видимости bottom-popup
@@ -424,19 +400,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (switchCheckbox && bottomPopupInputs && bottomEmailInput) {
         switchCheckbox.addEventListener('change', (e) => {
             if (e.target.checked) {
-                bottomPopupInputs.classList.remove('hidden'); // Показываем поле email
-                bottomEmailInput.focus(); // Автоматически фокусируемся на поле email
-                bottomForm.validateForm(); // Перепроверяем форму
+                bottomPopupInputs.classList.remove('hidden');
+                bottomEmailInput.focus();
+                bottomForm.validateForm();
             } else {
-                bottomPopupInputs.classList.add('hidden'); // Скрываем поле email
-                bottomPopupInputs.classList.remove('_form-error'); // Убираем ошибку
+                bottomPopupInputs.classList.add('hidden');
+                bottomPopupInputs.classList.remove('_form-error');
                 const errorSpan = bottomPopupInputs.parentNode.querySelector('.form-error');
-                if (errorSpan) errorSpan.remove(); // Удаляем сообщение об ошибке
-                bottomEmailInput.value = ''; // Очищаем значение email
-                bottomForm.validateForm(); // Перепроверяем форму
+                if (errorSpan) errorSpan.remove();
+                bottomEmailInput.value = '';
+                bottomForm.validateForm();
             }
         });
     }
-});
+});*/
 
 //========================================================================================================================================================

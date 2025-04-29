@@ -7,7 +7,7 @@
 		<meta name="format-detection" content="telephone=no">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-		<link rel="stylesheet" href="css/styles.css?v=1745821229334" />
+		<link rel="stylesheet" href="css/styles.css?v=1745886104357" />
 
 		<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -37,7 +37,7 @@
 					<form action="#" class="popup__body">
 						<div class="popup__top">
 							<div class="popup__top-title">Пополнение баланса</div>
-							<div class="popup__price">500,00 ₽</div>
+							<div class="popup__price">500,00 <span>₽</span></div>
 						</div>
 						<div class="popup__center">
 							<div class="popup__title">Оплатить картой</div>
@@ -56,7 +56,7 @@
 								</div>
 								<div class="popup__input input_cvv">
 									<label for="cvv">CVV</label>
-									<input inputmode="numeric" id="cvv" data-error="Ошибка в дате" data-required autocomplete="off" type="password" name="form[]" placeholder="000" class="cvv">
+									<input inputmode="numeric" id="cvv" data-error="Ошибка в cvv" data-required autocomplete="off" type="password" name="form[]" placeholder="000" class="cvv">
 								</div>
 								<div class="popup__icons">
 									<img class="payment-mastercard" src="img/icons/payment-mastercard.svg" alt="">
@@ -69,6 +69,7 @@
 									</div>
 								</div>
 							</div>
+							<div class="form-error"></div>
 						</div>
 						<button data-popup="#success" type="submit" class="popup__button" disabled>Оплатить</button>
 						<div class="popup__bottom bottom-popup">
@@ -101,16 +102,17 @@
 								<div class="popup__inputs hidden">
 									<div class="popup__input">
 										<label for="email">E-mail</label>
-										<input id="email" data-error="Для оплаты введите E-mail" data-required autocomplete="off" type="text" name="form[]" placeholder="">
+										<input id="email" value="123f@gmail.com" data-validate data-error="Для оплаты введите E-mail" data-required autocomplete="off" type="text" name="form[]" placeholder="">
 									</div>
 									<div class="popup__icons">
-										<div class="payment-close">
+										<div class="payment-close" style="display: none;">
 											<svg aria-hidden="true" width="12" height="12">
 												<use xlink:href="img/sprite.svg#close"></use>
 											</svg>
 										</div>
 									</div>
 								</div>
+								<div class="form-error"></div>
 							</div>
 						</div>
 						<div class="popup__footer footer-popup">
@@ -151,6 +153,14 @@
 							</div>
 						</div>
 					</form>
+					<div class="popup__animation">
+						<div class="popup__skeleton"></div>
+						<div class="popup__skeleton"></div>
+						<div class="popup__skeleton last"></div>
+						<div class="popup__skeleton small"></div>
+						<div class="popup__skeleton small"></div>
+						<div class="popup__skeleton small"></div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -163,7 +173,23 @@
 							<use xlink:href="img/sprite.svg#close-icon"></use>
 						</svg>
 					</button>
-					<div class="popup__body">
+					<div class="popup__warning">
+						<img src="img/icons/alert-warning.svg" alt="">
+						<div class="popup__warning-text">
+							<span>
+								Платеж в обработке
+							</span>
+							<p>
+								Не закрывайте страницу до окончания операции
+							</p>
+						</div>
+						<div class="warning-close">
+							<svg aria-hidden="true" width="16" height="16">
+								<use xlink:href="img/sprite.svg#close"></use>
+							</svg>
+						</div>
+					</div>
+					<div class="popup__body-2">
 						<div class="popup__status-icon">
 							<img src="img/icons/fail-icon.svg" alt="">
 						</div>
@@ -173,7 +199,7 @@
 						<div class="popup__alert-error">
 							Свяжитесь с вашим банком или воспользуйтесь другой картой
 						</div>
-						<button type="button" class="popup__button" data-close>Повторить попытку</button>
+						<button data-popup="#balance" type="button" class="popup__button">Повторить попытку</button>
 					</div>
 				</div>
 			</div>
